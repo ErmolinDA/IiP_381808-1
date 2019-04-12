@@ -21,8 +21,7 @@ void PrintMenu() {
 
 int main()
 {
-	//setlocale(LC_ALL, "Russian");//русский язык
-	system("chcp 1251");
+	system("chcp 1251");//подключение кириллицы
 	FilmLib a;
 	ifstream fi("text1.txt");
 	fi >> a;
@@ -30,7 +29,6 @@ int main()
 	a.SortDate();
 	a.SortName();
 	ofstream fo("text1.txt");
-	fo.clear();
 	while (1) {
 		int k;
 		system("cls");
@@ -123,6 +121,7 @@ int main()
 		case(0):
 			a.SortDate();
 			a.SortName();
+			fo.clear();
 			fo << a;
 			fo.close();
 			return 0;
