@@ -4,13 +4,13 @@
 
 using namespace std;
 
-struct Date
+struct Date//дата
 {
 	int year;
 	int month;
 	int day;
 };
-class Film
+class Film//служебный класс фильм
 {
 public:
 	char name[200];
@@ -23,7 +23,7 @@ public:
 	Film();
 	~Film();
 
-	friend ofstream& operator<< (ofstream& stream, const Film & b);//перегрузка вывода
-	friend ifstream& operator>> (ifstream& stream, Film & b);
+	friend ofstream& operator<< (ofstream& stream, const Film & b);//перегрузка вывода в файл
+	friend ifstream& operator>> (ifstream& stream, Film & b);//перегрузка ввода из файла
 };
 

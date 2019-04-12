@@ -33,18 +33,26 @@ int FilmLib::SearchFilm(char a[],int c)
 
 void FilmLib::SearchFilm(int c)
 {
+	int k = 0;
 	for (int i = 0; i < num; i++)
-		if (c == Lib[i].date.year)
+		if (c == Lib[i].date.year) {
 			cout << Lib[i].name << endl;
+			k++;
+		}
+	if (k == 0)
+		cout << "Фильмы не найдены" << endl;
 }
 
 void FilmLib::SearchDir(char a[])
 {
+	int k = 0;
 	for (int i = 0; i < num; i++) 
 	{
 		if (!strcmp(a, Lib[i].dir))
 			cout << Lib[i].name << endl;
 	}
+	if (k == 0)
+		cout << "Фильмы не найдены" << endl;
 }
 
 void FilmLib::SearchMoney(int c)
@@ -152,13 +160,21 @@ void FilmLib::SortName()
 void FilmLib::AddFilm()
 {
 	Film a = CreateFilm();
-	Film *A = new Film[num + 1];
-	for (int i = 0; i < num; i++)
-		A[i] = Lib[i];
-	A[num] = a;
-	num++;
-	Lib = new Film[num];
-	Lib = A;
+	if (num >= LibCount) {
+		Film *A = new Film[num + 1];
+		for (int i = 0; i < num; i++)
+			A[i] = Lib[i];
+		A[num] = a;
+		LibCount++; num++;
+		Lib = new Film[num];
+		Lib = A;
+	}
+	else {
+		Lib[num] = a;
+		num++;
+	}
+	SortDate();
+	SortName();
 }
 
 void FilmLib::DeleteFilm(char a[])
@@ -177,14 +193,9 @@ void FilmLib::DeleteFilm(char a[])
 		getchar();
 		return;
 	}
-	Film *A = new Film[num - 1];
-	for (int i = 0; i < c; i++)
-		A[i] = Lib[i];
 	for (int i = c + 1; i < num; i++)
-		A[i - 1] = Lib[i];
+		Lib[i - 1] = Lib[i];
 	num--;
-	Lib = new Film[num];
-	Lib = A;
 }
 
 ofstream & operator<<(ofstream & stream, const FilmLib & b)
@@ -198,7 +209,9 @@ ofstream & operator<<(ofstream & stream, const FilmLib & b)
 ifstream & operator>>(ifstream & stream, FilmLib & b)
 {
 	stream >> b.num;
-	b.Lib = new Film[b.num];
+	if (b.num > b.LibCount)
+		b.LibCount = b.num;
+	b.Lib = new Film[b.LibCount];
 	for (int i = 0;i<b.num; i++)
 		stream >> b.Lib[i];
 	return stream;
